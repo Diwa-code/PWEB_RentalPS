@@ -19,56 +19,35 @@ class Transaksi {
     // ─────────────────────────────────────────────
 
     /**
-     * Hitung estimasi waktu kembali berdasarkan pilihan durasi.
+     * Hitung estimasi waktu kembali berdasarkan durasi (dalam hari).
      * @param string $waktu_mulai  Format: 'Y-m-d H:i:s'
-     * @param string $durasi       '1 Hari' | '1 Minggu' | '1 Bulan'
+     * @param int|string $durasi   Jumlah hari (misal: 12 atau "12 Hari")
      * @return string              Format: 'Y-m-d H:i:s'
      */
     public function hitungEstimasiKembali($waktu_mulai, $durasi) {
         $estimasi = new DateTime($waktu_mulai);
         
-        // Parse format baru "X Hari" (misal: "3 Hari", "30 Hari")
-        if (preg_match('/^(\d+)\s+Hari$/i', trim($durasi), $matches)) {
-            $jumlah = (int)$matches[1];
-            $estimasi->modify("+$jumlah days");
-        } else {
-            // Fallback untuk format lama (1 Hari, 1 Minggu, 1 Bulan) atau jika hanya angka polos
-            if ($durasi == '1 Hari')        $estimasi->modify('+1 day');
-            elseif ($durasi == '1 Minggu')  $estimasi->modify('+7 days');
-            elseif ($durasi == '1 Bulan')   $estimasi->modify('+30 days');
-            else {
-                $jumlah = (int)trim($durasi);
-                if ($jumlah > 0) {
-                    $estimasi->modify("+$jumlah days");
-                }
-            }
+        // Ekstrak hanya angka dari input durasi (menghapus spasi atau kata "Hari")
+        $jumlah_hari = (int) preg_replace('/[^0-9]/', '', $durasi);
+        
+        if ($jumlah_hari > 0) {
+            $estimasi->modify("+$jumlah_hari days");
         }
+        
         return $estimasi->format('Y-m-d H:i:s');
     }
 
     /**
-     * Hitung harga sewa berdasarkan harga_per_hari dan pilihan durasi.
-     * @param int    $harga_per_hari
-     * @param string $durasi
+     * Hitung harga sewa berdasarkan harga_per_hari dan durasi (dalam hari).
+     * @param int        $harga_per_hari
+     * @param int|string $durasi   Jumlah hari (misal: 12 atau "12 Hari")
      * @return int
      */
     public function hitungHargaSewa($harga_per_hari, $durasi) {
-        // Parse format baru "X Hari" (misal: "3 Hari", "30 Hari")
-        if (preg_match('/^(\d+)\s+Hari$/i', trim($durasi), $matches)) {
-            $jumlah = (int)$matches[1];
-            return $harga_per_hari * $jumlah;
-        } else {
-            // Fallback untuk format lama (1 Hari, 1 Minggu, 1 Bulan) atau jika hanya angka polos
-            if ($durasi == '1 Hari')        return $harga_per_hari * 1;
-            if ($durasi == '1 Minggu')      return $harga_per_hari * 7;
-            if ($durasi == '1 Bulan')       return $harga_per_hari * 30;
-            
-            $jumlah = (int)trim($durasi);
-            if ($jumlah > 0) {
-                return $harga_per_hari * $jumlah;
-            }
-        }
-        return 0;
+        // Ekstrak hanya angka dari input durasi
+        $jumlah_hari = (int) preg_replace('/[^0-9]/', '', $durasi);
+        
+        return $harga_per_hari * $jumlah_hari;
     }
 
     /**
