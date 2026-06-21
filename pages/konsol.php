@@ -2,9 +2,10 @@
 // ============================================================
 // konsol.php - CRUD Master Konsol
 // ============================================================
+$path_prefix = '../';
 session_start();
-require_once 'classes/Database.php';
-require_once 'classes/Konsol.php';
+require_once '../classes/Database.php';
+require_once '../classes/Konsol.php';
 
 $database  = new Database();
 $db        = $database->getConnection();
@@ -113,11 +114,11 @@ function statusBadge($status) {
   <meta name="description" content="Kelola data unit konsol yang tersedia untuk disewakan beserta harga dan statusnya.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
-<?php include 'includes/sidebar.php'; ?>
+<?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 

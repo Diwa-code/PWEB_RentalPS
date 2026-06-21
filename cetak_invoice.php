@@ -206,7 +206,7 @@ $total_bayar = (int)$t['harga_sewa'] + (int)$t['total_denda'];
 
 <!-- Toolbar (screen only) -->
 <div class="print-toolbar">
-  <a href="transaksi.php" class="btn-back">
+  <a href="pages/transaksi.php" class="btn-back">
     <i class="bi bi-arrow-left me-1"></i> Kembali ke Transaksi
   </a>
   <h6><i class="bi bi-file-earmark-text me-1"></i>

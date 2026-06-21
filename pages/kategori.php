@@ -2,9 +2,10 @@
 // ============================================================
 // kategori.php - CRUD Master Kategori
 // ============================================================
+$path_prefix = '../';
 session_start();
-require_once 'classes/Database.php';
-require_once 'classes/Kategori.php';
+require_once '../classes/Database.php';
+require_once '../classes/Kategori.php';
 
 $database    = new Database();
 $db          = $database->getConnection();
@@ -87,11 +88,11 @@ $current_page = 'kategori';
   <meta name="description" content="Halaman CRUD data master kategori konsol pada sistem penyewaan konsol game.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
-<?php include 'includes/sidebar.php'; ?>
+<?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 

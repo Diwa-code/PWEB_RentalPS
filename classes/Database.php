@@ -21,7 +21,7 @@ if (!function_exists('dd')) {
 // Class Database - Koneksi PDO ke db_rental_ps
 // =====================================================
 class Database {
-    private $host     = "localhost";
+    private $host     = "127.0.0.1";
     private $db_name  = "db_rental_ps";
     private $username = "root";
     private $password = "";

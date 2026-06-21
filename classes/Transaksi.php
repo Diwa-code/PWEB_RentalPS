@@ -26,9 +26,23 @@ class Transaksi {
      */
     public function hitungEstimasiKembali($waktu_mulai, $durasi) {
         $estimasi = new DateTime($waktu_mulai);
-        if ($durasi == '1 Hari')   $estimasi->modify('+1 day');
-        elseif ($durasi == '1 Minggu') $estimasi->modify('+7 days');
-        elseif ($durasi == '1 Bulan') $estimasi->modify('+30 days');
+        
+        // Parse format baru "X Hari" (misal: "3 Hari", "30 Hari")
+        if (preg_match('/^(\d+)\s+Hari$/i', trim($durasi), $matches)) {
+            $jumlah = (int)$matches[1];
+            $estimasi->modify("+$jumlah days");
+        } else {
+            // Fallback untuk format lama (1 Hari, 1 Minggu, 1 Bulan) atau jika hanya angka polos
+            if ($durasi == '1 Hari')        $estimasi->modify('+1 day');
+            elseif ($durasi == '1 Minggu')  $estimasi->modify('+7 days');
+            elseif ($durasi == '1 Bulan')   $estimasi->modify('+30 days');
+            else {
+                $jumlah = (int)trim($durasi);
+                if ($jumlah > 0) {
+                    $estimasi->modify("+$jumlah days");
+                }
+            }
+        }
         return $estimasi->format('Y-m-d H:i:s');
     }
 
@@ -39,9 +53,21 @@ class Transaksi {
      * @return int
      */
     public function hitungHargaSewa($harga_per_hari, $durasi) {
-        if ($durasi == '1 Hari')   return $harga_per_hari * 1;
-        if ($durasi == '1 Minggu') return $harga_per_hari * 7;
-        if ($durasi == '1 Bulan')  return $harga_per_hari * 30;
+        // Parse format baru "X Hari" (misal: "3 Hari", "30 Hari")
+        if (preg_match('/^(\d+)\s+Hari$/i', trim($durasi), $matches)) {
+            $jumlah = (int)$matches[1];
+            return $harga_per_hari * $jumlah;
+        } else {
+            // Fallback untuk format lama (1 Hari, 1 Minggu, 1 Bulan) atau jika hanya angka polos
+            if ($durasi == '1 Hari')        return $harga_per_hari * 1;
+            if ($durasi == '1 Minggu')      return $harga_per_hari * 7;
+            if ($durasi == '1 Bulan')       return $harga_per_hari * 30;
+            
+            $jumlah = (int)trim($durasi);
+            if ($jumlah > 0) {
+                return $harga_per_hari * $jumlah;
+            }
+        }
         return 0;
     }
 

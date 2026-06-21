@@ -3,6 +3,7 @@
 // Variabel $current_page harus didefinisikan di halaman pemanggil
 // e.g.: $current_page = 'kategori';
 if (!isset($current_page)) $current_page = '';
+$prefix = isset($path_prefix) ? $path_prefix : '';
 ?>
 <nav class="sidebar" id="sidebar">
 
@@ -18,7 +19,7 @@ if (!isset($current_page)) $current_page = '';
 
     <div class="nav-section-label">Menu Utama</div>
 
-    <a href="dashboard.php"
+    <a href="<?= $prefix ?>index.php"
        class="nav-link <?= $current_page === 'dashboard' ? 'active' : '' ?>">
       <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
       Dashboard
@@ -26,19 +27,19 @@ if (!isset($current_page)) $current_page = '';
 
     <div class="nav-section-label">Data Master</div>
 
-    <a href="kategori.php"
+    <a href="<?= $prefix ?>pages/kategori.php"
        class="nav-link <?= $current_page === 'kategori' ? 'active' : '' ?>">
       <span class="nav-icon"><i class="bi bi-tags-fill"></i></span>
       Kategori
     </a>
 
-    <a href="konsol.php"
+    <a href="<?= $prefix ?>pages/konsol.php"
        class="nav-link <?= $current_page === 'konsol' ? 'active' : '' ?>">
       <span class="nav-icon"><i class="bi bi-controller"></i></span>
       Konsol
     </a>
 
-    <a href="customer.php"
+    <a href="<?= $prefix ?>pages/customer.php"
        class="nav-link <?= $current_page === 'customer' ? 'active' : '' ?>">
       <span class="nav-icon"><i class="bi bi-person-badge"></i></span>
       Customer
@@ -46,7 +47,7 @@ if (!isset($current_page)) $current_page = '';
 
     <div class="nav-section-label">Transaksi</div>
 
-    <a href="transaksi.php"
+    <a href="<?= $prefix ?>pages/transaksi.php"
        class="nav-link <?= $current_page === 'transaksi' ? 'active' : '' ?>">
       <span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span>
       Data Sewa

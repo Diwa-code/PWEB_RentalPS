@@ -2,9 +2,10 @@
 // ============================================================
 // transaksi.php - Interface Transaksi Sewa Konsol
 // ============================================================
+$path_prefix = '../';
 session_start();
-require_once 'classes/Database.php';
-require_once 'classes/Transaksi.php';
+require_once '../classes/Database.php';
+require_once '../classes/Transaksi.php';
 
 $database      = new Database();
 $db            = $database->getConnection();
@@ -21,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'create') {
         $id_customer    = (int)($_POST['id_customer']    ?? 0);
         $id_konsol      = (int)($_POST['id_konsol']      ?? 0);
-        $pilihan_durasi = trim($_POST['pilihan_durasi']   ?? '');
+        $durasi_hari    = (int)($_POST['durasi_hari']    ?? 1);
+        $pilihan_durasi = $durasi_hari . ' Hari';
         $harga_per_hari = (int)($_POST['harga_per_hari'] ?? 0);
         $waktu_mulai    = trim($_POST['waktu_mulai_sewa'] ?? '');
 
@@ -107,7 +109,7 @@ $current_page = 'transaksi';
   <meta name="description" content="Kelola transaksi sewa konsol, catat peminjaman baru, dan proses pengembalian dengan kalkulasi denda otomatis.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css">
   <style>
     /* ─── Badge status transaksi ─── */
     .badge-sedang   { background: linear-gradient(135deg,#f59e0b,#d97706); color:#fff; }
@@ -165,7 +167,7 @@ $current_page = 'transaksi';
 </head>
 <body>
 
-<?php include 'includes/sidebar.php'; ?>
+<?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 
@@ -294,7 +296,7 @@ $current_page = 'transaksi';
               </td>
               <td class="text-center">
                 <!-- Tombol Lihat Detail / Invoice -->
-                <a href="cetak_invoice.php?id=<?= $row['id_transaksi'] ?>"
+                <a href="../cetak_invoice.php?id=<?= $row['id_transaksi'] ?>"
                    class="btn btn-sm btn-outline-secondary me-1"
                    target="_blank"
                    id="btn-invoice-<?= $row['id_transaksi'] ?>"
@@ -405,16 +407,14 @@ $current_page = 'transaksi';
 
             <!-- Pilih Durasi -->
             <div class="col-md-6">
-              <label for="select_durasi" class="form-label">
+              <label for="input_durasi_hari" class="form-label">
                 Durasi Sewa <span class="text-danger">*</span>
               </label>
-              <select class="form-select" id="select_durasi" name="pilihan_durasi" required
-                      onchange="hitungHargaTotal()">
-                <option value="">-- Pilih Durasi --</option>
-                <option value="1 Hari">1 Hari</option>
-                <option value="1 Minggu">1 Minggu (7 Hari)</option>
-                <option value="1 Bulan">1 Bulan (30 Hari)</option>
-              </select>
+              <div class="input-group">
+                <input type="number" class="form-control" id="input_durasi_hari" name="durasi_hari" min="1" value="1" required
+                       onchange="hitungHargaTotal()" oninput="hitungHargaTotal()">
+                <span class="input-group-text">Hari</span>
+              </div>
             </div>
 
             <!-- Preview Harga Total -->
@@ -552,9 +552,10 @@ document.getElementById('modalSewaBaru').addEventListener('show.bs.modal', () =>
   const pad = n => String(n).padStart(2, '0');
   const local = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
   document.getElementById('waktu_mulai_sewa').value = local;
-  // Reset info customer
+  // Reset info customer & durasi
   document.getElementById('info-customer-card').style.display = 'none';
   document.getElementById('harga-preview-box').style.display  = 'none';
+  document.getElementById('input_durasi_hari').value = 1;
 });
 
 // ─── Tampilkan info customer otomatis saat dipilih ───
@@ -567,7 +568,7 @@ function tampilInfoCustomer(sel) {
   document.getElementById('info-wa').textContent     = opt.dataset.wa;
   document.getElementById('info-alamat').textContent = opt.dataset.alamat;
 
-  const ktpSrc = opt.dataset.ktp ? 'uploads/' + opt.dataset.ktp : '';
+  const ktpSrc = opt.dataset.ktp ? '../uploads/' + opt.dataset.ktp : '';
   const img = document.getElementById('info-ktp-img');
   if (ktpSrc) {
     img.src = ktpSrc;
@@ -589,17 +590,12 @@ function updateHarga(sel) {
 // ─── Hitung & tampilkan harga total ───
 function hitungHargaTotal() {
   const harga = parseInt(document.getElementById('hidden_harga_per_hari').value) || 0;
-  const durasi = document.getElementById('select_durasi').value;
-  const box    = document.getElementById('harga-preview-box');
+  const hari  = parseInt(document.getElementById('input_durasi_hari').value) || 1;
+  const box   = document.getElementById('harga-preview-box');
 
-  if (!harga || !durasi) { box.style.display = 'none'; return; }
+  if (!harga || hari <= 0) { box.style.display = 'none'; return; }
 
-  let multiplier = 0;
-  if (durasi === '1 Hari')   multiplier = 1;
-  if (durasi === '1 Minggu') multiplier = 7;
-  if (durasi === '1 Bulan')  multiplier = 30;
-
-  const total = harga * multiplier;
+  const total = harga * hari;
   document.getElementById('harga-total-text').textContent = 'Rp ' + total.toLocaleString('id-ID');
   box.style.display = 'block';
 }

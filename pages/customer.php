@@ -2,9 +2,10 @@
 // ============================================================
 // customer.php - CRUD Master Customer
 // ============================================================
+$path_prefix = '../';
 session_start();
-require_once 'classes/Database.php';
-require_once 'classes/Customer.php';
+require_once '../classes/Database.php';
+require_once '../classes/Customer.php';
 
 $database    = new Database();
 $db          = $database->getConnection();
@@ -110,7 +111,7 @@ $current_page = 'customer';
   <meta name="description" content="Kelola data pelanggan dan file KTP jaminan pada sistem penyewaan konsol game.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="../assets/style.css">
   <style>
     /* Preview KTP saat memilih file baru */
     #preview-ktp-tambah, #preview-ktp-edit {
@@ -123,7 +124,7 @@ $current_page = 'customer';
 </head>
 <body>
 
-<?php include 'includes/sidebar.php'; ?>
+<?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 
@@ -195,7 +196,7 @@ $current_page = 'customer';
               </td>
             </tr>
             <?php else: foreach ($rows as $row): ?>
-            <?php $ktp_path = 'uploads/' . htmlspecialchars($row['foto_ktp']); ?>
+            <?php $ktp_path = '../uploads/' . htmlspecialchars($row['foto_ktp']); ?>
             <tr id="row-customer-<?= $row['id_customer'] ?>">
               <td class="text-muted"><?= $no++ ?></td>
               <td>
@@ -439,7 +440,7 @@ function bukaModeEdit(data) {
   document.getElementById('edit_no_wa').value        = data.no_wa;
   document.getElementById('edit_alamat').value       = data.alamat;
   // Tampilkan foto KTP lama
-  document.getElementById('edit_ktp_lama_preview').src = 'uploads/' + data.foto_ktp;
+  document.getElementById('edit_ktp_lama_preview').src = '../uploads/' + data.foto_ktp;
   // Reset file input & preview baru
   document.getElementById('edit_foto_ktp').value    = '';
   document.getElementById('preview-ktp-edit').style.display = 'none';

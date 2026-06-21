@@ -122,14 +122,22 @@ class Konsol {
      */
     public function delete($id) {
         try {
+            // Cek apakah konsol sedang aktif disewa (status = 'Disewa')
+            $checkQuery = "SELECT status FROM {$this->table} WHERE id_konsol = :id LIMIT 1";
+            $checkStmt  = $this->conn->prepare($checkQuery);
+            $checkStmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $checkStmt->execute();
+            $console = $checkStmt->fetch();
+
+            if ($console && $console['status'] === 'Disewa') {
+                throw new Exception("Konsol tidak bisa dihapus karena sedang aktif disewa!");
+            }
+
             $query = "DELETE FROM {$this->table} WHERE id_konsol = :id";
             $stmt  = $this->conn->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            if ($e->getCode() == 23000) {
-                throw new Exception("Konsol tidak bisa dihapus karena masih terkait dengan data Transaksi!");
-            }
             die("Gagal Mengeksekusi Operasi Database: " . $e->getMessage());
         }
     }
