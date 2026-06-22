@@ -16,6 +16,8 @@ $flash_type = '';
 
 // ── POST Handler ──
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Debugging: Tampilkan isi $_POST untuk memeriksa data yang dikirim
+    //dd($_POST);
     $action = $_POST['action'] ?? '';
 
     // ── CREATE ──
@@ -223,18 +225,20 @@ $current_page = 'customer';
                 <?php endif; ?>
               </td>
               <td class="text-center">
-                <button class="btn btn-sm btn-action-edit me-1"
-                        id="btn-edit-customer-<?= $row['id_customer'] ?>"
-                        onclick="bukaModeEdit(<?= htmlspecialchars(json_encode($row)) ?>)"
-                        title="Edit">
-                  <i class="bi bi-pencil-fill me-1"></i>Edit
-                </button>
-                <button class="btn btn-sm btn-action-delete"
-                        id="btn-hapus-customer-<?= $row['id_customer'] ?>"
-                        onclick="konfirmasiHapus(<?= $row['id_customer'] ?>, '<?= addslashes(htmlspecialchars($row['nama_lengkap'])) ?>')"
-                        title="Hapus">
-                  <i class="bi bi-trash3-fill me-1"></i>Hapus
-                </button>
+                <div class="action-buttons">
+                  <button class="btn btn-sm btn-warning action-btn px-2 me-1"
+                          id="btn-edit-customer-<?= $row['id_customer'] ?>"
+                          onclick="bukaModeEdit(<?= htmlspecialchars(json_encode($row)) ?>)"
+                          title="Edit">
+                    <i class="bi bi-pencil-fill me-1"></i>Edit  
+                  </button>
+                  <button class="btn btn-sm btn-danger action-btn"
+                          id="btn-hapus-customer-<?= $row['id_customer'] ?>"
+                          onclick="konfirmasiHapus(<?= $row['id_customer'] ?>, '<?= addslashes(htmlspecialchars($row['nama_lengkap'])) ?>')"
+                          title="Hapus">
+                    <i class="bi bi-trash3-fill me-1"></i>Hapus
+                  </button>
+                </div>
               </td>
             </tr>
             <?php endforeach; endif; ?>
@@ -278,8 +282,9 @@ $current_page = 'customer';
               <label for="tambah_no_wa" class="form-label">No. WhatsApp <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-whatsapp text-success"></i></span>
-                <input type="text" class="form-control" id="tambah_no_wa" name="no_wa"
-                       placeholder="08xxxxxxxxxx" required autocomplete="off">
+                <input type="tel" class="form-control" id="tambah_no_wa" name="no_wa"
+                       placeholder="08xxxxxxxxxx" required autocomplete="off"
+                       inputmode="tel" maxlength="15">
               </div>
             </div>
             <div class="col-12">
@@ -332,7 +337,8 @@ $current_page = 'customer';
               <label for="edit_no_wa" class="form-label">No. WhatsApp <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-whatsapp text-success"></i></span>
-                <input type="text" class="form-control" id="edit_no_wa" name="no_wa" required autocomplete="off">
+                <input type="tel" class="form-control" id="edit_no_wa" name="no_wa" required autocomplete="off"
+                       inputmode="tel" maxlength="15">
               </div>
             </div>
             <div class="col-12">
@@ -418,9 +424,26 @@ $current_page = 'customer';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+const MAX_KTP_SIZE = 2 * 1024 * 1024;
+
+function fileKtpTerlaluBesar(input) {
+  return input && input.files && input.files[0] && input.files[0].size > MAX_KTP_SIZE;
+}
+
+function tampilkanPeringatanUkuranKtp(input) {
+  alert('Ukuran file KTP maksimal 2 MB. Pilih file yang lebih kecil.');
+  input.focus();
+}
+
 // ── Preview file KTP sebelum submit ──
 function previewKTP(input, previewId) {
   const preview = document.getElementById(previewId);
+  if (fileKtpTerlaluBesar(input)) {
+    tampilkanPeringatanUkuranKtp(input);
+    preview.style.display = 'none';
+    return;
+  }
+
   if (input.files && input.files[0]) {
     const reader = new FileReader();
     reader.onload = e => {
@@ -432,6 +455,36 @@ function previewKTP(input, previewId) {
     preview.style.display = 'none';
   }
 }
+
+function validasiNoWaForm(form) {
+  const noWaInput = form.querySelector('input[name="no_wa"]');
+  if (noWaInput && /[a-z]/i.test(noWaInput.value)) {
+    alert('Nomor WhatsApp tidak boleh berisi huruf. Gunakan angka saja.');
+    noWaInput.focus();
+    return false;
+  }
+  return true;
+}
+
+function validasiUkuranKtpForm(form) {
+  const fileInput = form.querySelector('input[name="foto_ktp"]');
+  if (fileKtpTerlaluBesar(fileInput)) {
+    tampilkanPeringatanUkuranKtp(fileInput);
+    return false;
+  }
+  return true;
+}
+
+['form-tambah-customer', 'form-edit-customer'].forEach(formId => {
+  const form = document.getElementById(formId);
+  if (form) {
+    form.addEventListener('submit', event => {
+      if (!validasiNoWaForm(form) || !validasiUkuranKtpForm(form)) {
+        event.preventDefault();
+      }
+    });
+  }
+});
 
 // ── Buka Modal Edit ──
 function bukaModeEdit(data) {

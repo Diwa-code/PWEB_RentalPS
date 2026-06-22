@@ -95,6 +95,13 @@ if (!empty($_SESSION['flash'])) {
 
 $search      = trim($_GET['search'] ?? '');
 $transaksi   = $transaksiObj->getAll($search);
+$jumlah_sedang_disewa = count(array_filter($transaksi, function ($row) {
+    return $row['status_transaksi'] === 'Sedang Disewa';
+}));
+$total_penyewaan = count($transaksi);
+$total_harga_sewa = array_sum(array_map(function ($row) {
+    return (int) $row['harga_sewa'];
+}, $transaksi));
 $customers   = $transaksiObj->getAllCustomer();
 $konsol_list = $transaksiObj->getKonsolTersedia();
 
@@ -301,7 +308,7 @@ $current_page = 'transaksi';
                    target="_blank"
                    id="btn-invoice-<?= $row['id_transaksi'] ?>"
                    title="Lihat Invoice">
-                  <i class="bi bi-printer-fill me-1"></i>Invoice
+                  <i class="bi bi-printer-fill "></i>Invoice
                 </a>
                 <!-- Tombol Proses Kembali (hanya jika masih aktif) -->
                 <?php if ($is_aktif): ?>
@@ -309,12 +316,38 @@ $current_page = 'transaksi';
                           id="btn-kembali-<?= $row['id_transaksi'] ?>"
                           onclick="bukaModalKembali(<?= htmlspecialchars(json_encode($row)) ?>)"
                           title="Proses Pengembalian">
-                    <i class="bi bi-box-arrow-in-down me-1"></i>Kembali
+                    <i class="bi bi-box-arrow-in-down"></i>Kembali
                   </button>
                 <?php endif; ?>
               </td>
             </tr>
             <?php endforeach; endif; ?>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="table-card mt-3">
+      <div class="table-header">
+        <span class="table-title"><i class="bi bi-clipboard-data me-2"></i>Laporan Total Penyewaan</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover mb-0" id="table-laporan-sewa">
+          <thead>
+            <tr>
+              <th class="text-center">Jumlah Sedang Disewa</th>
+              <th class="text-center">Jumlah Total Penyewaan</th>
+              <th class="text-center">Total Pendapatan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center fw-600"><?= number_format($jumlah_sedang_disewa, 0, ',', '.') ?></td>
+              <td class="text-center fw-600"><?= number_format($total_penyewaan, 0, ',', '.') ?></td>
+              <td class="text-center text-price">Rp <?= number_format($total_harga_sewa, 0, ',', '.') ?></td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -205,15 +205,6 @@ body {
   box-shadow: var(--shadow);
 }
 
-.stat-card::after {
-  content: '';
-  position: absolute;
-  top: -20px; right: -20px;
-  width: 100px; height: 100px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.12);
-}
-
 .stat-card .stat-icon {
   font-size: 32px;
   opacity: .9;
@@ -312,26 +303,15 @@ body {
 
 .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
 
-.btn-action-edit {
-  background: #eff6ff;
-  color: var(--primary);
-  border: 1px solid #bfdbfe;
-}
-.btn-action-edit:hover {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
-.btn-action-delete {
-  background: #fef2f2;
-  color: var(--danger);
-  border: 1px solid #fecaca;
-}
-.btn-action-delete:hover {
-  background: var(--danger);
-  color: #fff;
-  border-color: var(--danger);
+.action-btn {
+  width: 82px;
 }
 
 /* ============================================================

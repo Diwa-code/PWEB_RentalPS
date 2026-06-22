@@ -16,6 +16,26 @@ class Customer {
     }
 
     /**
+     * Validasi sederhana nomor WhatsApp agar tidak berisi huruf.
+     * @param string $noWa
+     * @return string
+     * @throws Exception
+     */
+    private function validateNoWa($noWa) {
+        $noWa = trim($noWa);
+
+        if ($noWa === '') {
+            throw new Exception("Nomor WhatsApp wajib diisi!");
+        }
+
+        if (preg_match('/[a-z]/i', $noWa)) {
+            throw new Exception("Nomor WhatsApp tidak boleh berisi huruf.");
+        }
+
+        return $noWa;
+    }
+
+    /**
      * Ambil semua data customer, dengan opsional filter pencarian.
      * @param string $search Kata kunci (nama_lengkap / no_wa)
      * @return PDOStatement
@@ -97,6 +117,7 @@ class Customer {
      * @throws Exception
      */
     public function create($data, $file) {
+        $data['no_wa'] = $this->validateNoWa($data['no_wa']);
         $foto_ktp = $this->uploadKTP($file);
         try {
             $query = "INSERT INTO {$this->table}
@@ -125,6 +146,7 @@ class Customer {
      * @throws Exception
      */
     public function update($id, $data, $file = null) {
+        $data['no_wa'] = $this->validateNoWa($data['no_wa']);
         try {
             // Ambil data lama untuk mengetahui nama file KTP lama
             $old = $this->getById($id);

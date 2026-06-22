@@ -201,18 +201,20 @@ function statusBadge($status) {
               <td class="text-price">Rp <?= number_format($row['harga_per_hari'], 0, ',', '.') ?></td>
               <td class="text-center"><?= statusBadge($row['status']) ?></td>
               <td class="text-center">
-                <button class="btn btn-sm btn-action-edit me-1"
-                        id="btn-edit-konsol-<?= $row['id_konsol'] ?>"
-                        onclick="bukaModeEdit(<?= htmlspecialchars(json_encode($row)) ?>)"
-                        title="Edit">
-                  <i class="bi bi-pencil-fill me-1"></i>Edit
-                </button>
-                <button class="btn btn-sm btn-action-delete"
-                        id="btn-hapus-konsol-<?= $row['id_konsol'] ?>"
-                        onclick="konfirmasiHapus(<?= $row['id_konsol'] ?>, '<?= addslashes(htmlspecialchars($row['nama_konsol'])) ?>')"
-                        title="Hapus">
-                  <i class="bi bi-trash3-fill me-1"></i>Hapus
-                </button>
+                <div class="action-buttons">
+                  <button class="btn btn-sm btn-warning action-btn"
+                          id="btn-edit-konsol-<?= $row['id_konsol'] ?>"
+                          onclick="bukaModeEdit(<?= htmlspecialchars(json_encode($row)) ?>)"
+                          title="Edit">
+                    <i class="bi bi-pencil-fill px-2"></i>Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger action-btn"
+                          id="btn-hapus-konsol-<?= $row['id_konsol'] ?>"
+                          onclick="konfirmasiHapus(<?= $row['id_konsol'] ?>, '<?= addslashes(htmlspecialchars($row['nama_konsol'])) ?>')"
+                          title="Hapus">
+                    <i class="bi bi-trash3-fill mt-2"></i>Hapus
+                  </button>
+                </div>
               </td>
             </tr>
             <?php endforeach; endif; ?>

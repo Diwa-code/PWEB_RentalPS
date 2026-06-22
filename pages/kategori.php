@@ -166,20 +166,20 @@ $current_page = 'kategori';
               <td class="text-muted fw-500"><?= $no++ ?></td>
               <td class="fw-500"><?= htmlspecialchars($row['nama_kategori']) ?></td>
               <td class="text-center">
-                <!-- Tombol Edit -->
-                <button class="btn btn-sm btn-action-edit me-1"
-                        id="btn-edit-kategori-<?= $row['id_kategori'] ?>"
-                        onclick="bukaModeEdit(<?= $row['id_kategori'] ?>, '<?= addslashes(htmlspecialchars($row['nama_kategori'])) ?>')"
-                        title="Edit">
-                  <i class="bi bi-pencil-fill me-1"></i>Edit
-                </button>
-                <!-- Tombol Hapus -->
-                <button class="btn btn-sm btn-action-delete"
-                        id="btn-hapus-kategori-<?= $row['id_kategori'] ?>"
-                        onclick="konfirmasiHapus(<?= $row['id_kategori'] ?>, '<?= addslashes(htmlspecialchars($row['nama_kategori'])) ?>')"
-                        title="Hapus">
-                  <i class="bi bi-trash3-fill me-1"></i>Hapus
-                </button>
+                <div class="action-buttons">
+                  <button class="btn btn-sm btn-warning action-btn"
+                          id="btn-edit-kategori-<?= $row['id_kategori'] ?>"
+                          onclick="bukaModeEdit(<?= $row['id_kategori'] ?>, '<?= addslashes(htmlspecialchars($row['nama_kategori'])) ?>')"
+                          title="Edit">
+                    <i class="bi bi-pencil-fill px-2 me-1"></i>Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger action-btn mt-2"
+                          id="btn-hapus-kategori-<?= $row['id_kategori'] ?>"
+                          onclick="konfirmasiHapus(<?= $row['id_kategori'] ?>, '<?= addslashes(htmlspecialchars($row['nama_kategori'])) ?>')"
+                          title="Hapus">
+                    <i class="bi bi-trash3-fill "></i>Hapus
+                  </button>
+                </div>
               </td>
             </tr>
             <?php endforeach; endif; ?>
