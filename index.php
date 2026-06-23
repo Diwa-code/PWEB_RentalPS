@@ -111,7 +111,7 @@ $current_page = 'dashboard';
                 ['href'=>'pages/kategori.php',  'icon'=>'bi-tags-fill',    'label'=>'Kelola Kategori',  'color'=>'text-purple-600',  'bg'=>'#ede9fe'],
                 ['href'=>'pages/konsol.php',    'icon'=>'bi-controller',   'label'=>'Kelola Konsol',    'color'=>'#2563eb', 'bg'=>'#eff6ff'],
                 ['href'=>'pages/customer.php',  'icon'=>'bi-person-badge', 'label'=>'Kelola Customer',  'color'=>'#16a34a', 'bg'=>'#f0fdf4'],
-                ['href'=>'pages/transaksi.php', 'icon'=>'bi-receipt',      'label'=>'Data Transaksi',   'color'=>'#d97706', 'bg'=>'#fffbeb'],
+                ['href'=>'pages/transaksi.php', 'icon'=>'bi-receipt',      'label'=>'Data Sewa',   'color'=>'#d97706', 'bg'=>'#fffbeb'],
               ];
               foreach ($links as $l): ?>
                 <div class="col-6 col-md-3">

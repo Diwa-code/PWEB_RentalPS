@@ -202,17 +202,17 @@ function statusBadge($status) {
               <td class="text-center"><?= statusBadge($row['status']) ?></td>
               <td class="text-center">
                 <div class="action-buttons">
-                  <button class="btn btn-sm btn-warning action-btn"
+                  <button class="btn btn-sm btn-warning action-btn mt-2 me-1"
                           id="btn-edit-konsol-<?= $row['id_konsol'] ?>"
                           onclick="bukaModeEdit(<?= htmlspecialchars(json_encode($row)) ?>)"
                           title="Edit">
-                    <i class="bi bi-pencil-fill px-2"></i>Edit
+                    <i class="bi bi-pencil-fill "></i>Edit
                   </button>
-                  <button class="btn btn-sm btn-danger action-btn"
+                  <button class="btn btn-sm btn-danger action-btn mt-2"
                           id="btn-hapus-konsol-<?= $row['id_konsol'] ?>"
                           onclick="konfirmasiHapus(<?= $row['id_konsol'] ?>, '<?= addslashes(htmlspecialchars($row['nama_konsol'])) ?>')"
                           title="Hapus">
-                    <i class="bi bi-trash3-fill mt-2"></i>Hapus
+                    <i class="bi bi-trash3-fill "></i>Hapus
                   </button>
                 </div>
               </td>

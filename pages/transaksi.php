@@ -312,7 +312,7 @@ $current_page = 'transaksi';
                 </a>
                 <!-- Tombol Proses Kembali (hanya jika masih aktif) -->
                 <?php if ($is_aktif): ?>
-                  <button class="btn btn-sm btn-kembali"
+                  <button class="btn btn-sm btn-kembali mt-2"
                           id="btn-kembali-<?= $row['id_transaksi'] ?>"
                           onclick="bukaModalKembali(<?= htmlspecialchars(json_encode($row)) ?>)"
                           title="Proses Pengembalian">
